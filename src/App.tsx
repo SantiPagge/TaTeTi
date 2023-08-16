@@ -22,6 +22,14 @@ function App() {
 
     const draft = {...plays, [cell]: player};
 
+    const winner = WINNER_COMPS.find(comp => comp.every(cell => draft[cell] === player));
+
+    if(winner){
+      alert('Winner ' + player);
+      setPlays({});
+      return
+    }
+
     setPlays(draft)
     setPlayer((prevPlayer) => (prevPlayer === 'X' ? 'O' : 'X'));
   };
