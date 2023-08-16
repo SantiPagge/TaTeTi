@@ -19,7 +19,10 @@ function App() {
 
   function handleClick(cell: number){
     if(plays[cell]) return;
-    setPlays((prevPlays) => ({...prevPlays, [cell]: player}))
+
+    const draft = {...plays, [cell]: player};
+
+    setPlays(draft)
     setPlayer((prevPlayer) => (prevPlayer === 'X' ? 'O' : 'X'));
   };
 
