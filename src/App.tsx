@@ -15,22 +15,27 @@ const GRID = Array.from(Array(9).keys());
 
 function App() {
   const [player, setPlayer] = useState <'X' | 'O'> ('X');
-  const [plays, setPlays] = useState<Record<number, 'X' | 'O'>>({});
+  const [plays, setPlays] = useState<Map<number, 'X' | 'O'>>(new Map());
 
   function handleClick(cell: number){
-    if(plays[cell]) return;
+    if(plays.has(cell)) return;
 
-    const draft = {...plays, [cell]: player};
+    const draft = new Map(plays);
+    
+    draft.set(cell, player);
 
-    const winner = WINNER_COMPS.find(comp => comp.every(cell => draft[cell] === player));
-
-    if(winner){
-      alert('Winner ' + player);
-      setPlays({});
-      return
-    }
+    const winner = WINNER_COMPS.find(comp => comp.every(cell => draft.get(cell) === player));
 
     setPlays(draft)
+
+    if(winner){
+      setTimeout(() => {
+        alert(`${player} Wins!`);
+        setPlays(new Map())
+      }, 100);
+      return
+    };
+
     setPlayer((prevPlayer) => (prevPlayer === 'X' ? 'O' : 'X'));
   };
 
@@ -38,7 +43,7 @@ function App() {
     <main>
       {GRID.map((i) => (
         <button key={i} onClick={() => handleClick(i)}>
-          {plays[i]}
+          {plays.get(i)}
         </button>
       ))}
     </main>
